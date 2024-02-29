@@ -21,7 +21,8 @@ const SignIn = () => {
   });
 
  const {user,success,error,isLoading} = useSelector((state)=>state.signIn)
-
+const data = JSON.parse(localStorage.getItem('user'))
+    const [redirect, setRedirect] = useState(false);
   //validation function:
   const validate = (values) => {
     const errors = {};
@@ -40,7 +41,7 @@ const SignIn = () => {
     return errors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
 e.preventDefault();
 try {
   const form = e.currentTarget;
@@ -53,12 +54,22 @@ try {
       console.log(validationErrors)
       if (Object.keys(validationErrors).length === 0) {
   
-dispatch(userSignIn(signin));
+           await dispatch(userSignIn(signin));
+
 setSignin({
 email: "",
 password: "",
 });
-navigate("/") 
+
+if (redirect) {
+  
+  navigate("/shipping");         
+} else {           
+  navigate("/");        
+ }
+
+  setRedirect(true)
+
       }
 
 setValidated(true);
@@ -76,12 +87,24 @@ setValidated(true);
   }
 
   
-  // useEffect(()=>{
-  //   if(success || user){
-  //     navigate("/") 
-  //   }
-  // },[success,user])
- 
+//   useEffect(()=>{
+//     if(redirect){
+//       navigate("/shipping") 
+//     }
+//   },[redirect])
+
+  
+//   useEffect(()=>{
+// if(success){
+// navigate("/")
+// }
+// },[success])
+
+useEffect(() => {  
+     if (success && user) { 
+            setRedirect(true);   
+            }
+             }, [success, user]);
   return (
     <Container className="py-4 " fluid>
       <Row className="justify-content-md-center mb-4">

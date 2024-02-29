@@ -232,7 +232,7 @@ function Header() {
 
               <Nav.Link>Return & Orders</Nav.Link>
 
-              <Nav.Link>
+              <Nav.Link href="/cart">
                 <Image
                   width="30"
                   src="https://img.icons8.com/dotty/80/FFFFFF/shopping-cart.png"

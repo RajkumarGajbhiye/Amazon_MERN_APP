@@ -1,4 +1,5 @@
 import React from "react";
+import { Container } from "react-bootstrap";
 import Carousel from "react-bootstrap/Carousel";
 import Image from "react-bootstrap/esm/Image";
 import { useSelector } from "react-redux";
@@ -9,6 +10,7 @@ const ProductCarousel = () => {
   );
 
   return (
+    <Container>
     <Carousel data-bs-theme="dark" className="mb-4">
       {products_Array.map((caro, i) => (
         <Carousel.Item key={i}>
@@ -26,6 +28,7 @@ const ProductCarousel = () => {
         </Carousel.Item>
       ))}
     </Carousel>
+    </Container>
   );
 };
 

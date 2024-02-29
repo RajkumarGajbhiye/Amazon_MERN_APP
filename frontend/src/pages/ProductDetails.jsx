@@ -6,7 +6,7 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "../css/HomePage.css";
 import Image from "react-bootstrap/esm/Image";
 import Header from "../components/Header";
@@ -20,13 +20,15 @@ import { items_Add_To_Cart } from "../redux/slice/cartSlice";
 const ProductDetails = () => {
   const [qty, setQty] = useState(1);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { _id } = useParams();
   const { productDetails, isLoading, error } = useSelector((state) => ({
     ...state.products,
   }));
 
   const addToCartHandler=()=>{
-    dispatch(items_Add_To_Cart({...productDetails,qty})) 
+    dispatch(items_Add_To_Cart({...productDetails,qty}));
+    navigate("/cart")
   }
   useEffect(() => {
     if (_id) {
@@ -110,7 +112,7 @@ const ProductDetails = () => {
                           value={qty}
                           onChange={(e) => setQty(Number(e.target.value))}
                         >
-                          {[...Array(productDetails.countInStock).keys()].map(
+                          {[...Array(Math.min(50,productDetails.countInStock)).keys()].map(
                             (x) => (
                               <option key={x + 1} value={x + 1}>
                                 {x + 1}

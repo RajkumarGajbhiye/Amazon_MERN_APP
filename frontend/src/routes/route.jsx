@@ -1,5 +1,7 @@
+import Cart from "../pages/Cart";
 import HomePage from "../pages/HomePage";
 import ProductDetails from "../pages/ProductDetails";
+import Shipping from "../pages/Shipping";
 import SignIn from "../pages/SignIn";
 import SignUp from "../pages/SignUp";
 
@@ -19,6 +21,14 @@ const route = [
       {
         path: "/product/:_id",
         element: <ProductDetails/>,
+      },
+      {
+        path: "/cart",
+        element: <Cart/>,
+      },
+      {
+        path: "/shipping",
+        element: <Shipping/>,
       },
 ]
 
