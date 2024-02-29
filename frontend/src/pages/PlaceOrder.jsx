@@ -44,7 +44,7 @@ const PlaceOrder = () => {
   return (
     <>
     <Header/><br/><br/><br/>
-      <CheckoutSteps />
+      <CheckoutSteps step3/>
       <Row>
         <Col md={8}>
           <ListGroup variant='flush'>

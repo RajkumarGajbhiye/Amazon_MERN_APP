@@ -30,7 +30,7 @@ const Payment = () => {
     <>
     <Header/><br/><br/><br/><br/>
     <Container>
-      <CheckoutSteps/>
+      <CheckoutSteps step2/>
       <h1>Payment Method</h1>
       <Form onSubmit={submitHandler}>
         <Form.Group>
