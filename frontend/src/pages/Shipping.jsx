@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, Button, Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import saveShippingAddress from "../redux/slice/cartSlice";
+import {saveShippingAddress} from "../redux/slice/cartSlice";
 import CheckoutSteps from "../components/CheckoutSteps";
 import Header from "../components/Header";
 
 const Shipping = () => {
-  const cart_Array = useSelector((state) => state.cart.cart_Array);
+  const cart_Array = useSelector((state) => state.cart);
 
   const { shippingAddress } = cart_Array;
 
@@ -23,16 +23,29 @@ const Shipping = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
+    
     dispatch(saveShippingAddress({ address, city, postalCode, country }));
+    
+   
     navigate('/payment');
   };
 
+  useEffect(()=>{
+    if(shippingAddress){
+      setAddress("");
+      setCity("");
+      setPostalCode("");
+      setCountry("");
+    }
+
+  },[])
+  
   return (
     <>
     <Header/><br/><br/><br/><br/>
    
     <Container>
-      <CheckoutSteps />
+      <CheckoutSteps/>
       <h1>Shipping</h1>
       <Form onSubmit={submitHandler}>
         <Form.Group className="my-2" controlId="address">

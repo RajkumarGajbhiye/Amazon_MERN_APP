@@ -1,5 +1,7 @@
 import Cart from "../pages/Cart";
 import HomePage from "../pages/HomePage";
+import Payment from "../pages/Payment";
+import PlaceOrder from "../pages/PlaceOrder";
 import ProductDetails from "../pages/ProductDetails";
 import Shipping from "../pages/Shipping";
 import SignIn from "../pages/SignIn";
@@ -30,6 +32,14 @@ const route = [
         path: "/shipping",
         element: <Shipping/>,
       },
+      {
+        path: "/payment",
+        element: <Payment/>,
+      },
+      {
+        path:"/placeorder",
+        element:<PlaceOrder/>
+      }
 ]
 
 export default route;

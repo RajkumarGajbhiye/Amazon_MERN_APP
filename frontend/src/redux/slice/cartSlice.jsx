@@ -43,11 +43,13 @@ const initialState = localStorage.getItem('cart')
       state.cart_Array = [];
       localStorage.setItem('cart', JSON.stringify(state));
     },
+
+    resetCart: (state) => (state = initialState),
   },
 
  
 })
 
-export const { items_Add_To_Cart, items_Remove_To_Cart } = cartSlice.actions;
+export const { items_Add_To_Cart, items_Remove_To_Cart,saveShippingAddress,savePaymentMethod,clearCartItems,resetCart } = cartSlice.actions;
 export default cartSlice.reducer;
  
