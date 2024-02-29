@@ -5,7 +5,7 @@ import Container from "react-bootstrap/esm/Container";
 import Row from "react-bootstrap/esm/Row";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Image from "react-bootstrap/esm/Image";
 import { userSignIn } from "../redux/thunk/userThunk";
 import { useDispatch, useSelector} from "react-redux";
@@ -20,9 +20,11 @@ const SignIn = () => {
     password: "",
   });
 
- const {user,success,error,isLoading} = useSelector((state)=>state.signIn)
-const data = JSON.parse(localStorage.getItem('user'))
-    const [redirect, setRedirect] = useState(false);
+  const location = useLocation();
+ 
+  const {success} = useSelector((state)=>state.signIn)
+
+const redirect = location.search ? location.search.split("=")[1] : "/";
   //validation function:
   const validate = (values) => {
     const errors = {};
@@ -55,20 +57,11 @@ try {
       if (Object.keys(validationErrors).length === 0) {
   
            await dispatch(userSignIn(signin));
-
+           navigate(redirect);
 setSignin({
 email: "",
 password: "",
 });
-
-if (redirect) {
-  
-  navigate("/shipping");         
-} else {           
-  navigate("/");        
- }
-
-  setRedirect(true)
 
       }
 
@@ -87,24 +80,16 @@ setValidated(true);
   }
 
   
-//   useEffect(()=>{
-//     if(redirect){
-//       navigate("/shipping") 
-//     }
-//   },[redirect])
+  useEffect(()=>{
+    if (success) {
+      navigate(redirect)
+  }
+  },[redirect,navigate,success])
 
   
-//   useEffect(()=>{
-// if(success){
-// navigate("/")
-// }
-// },[success])
 
-useEffect(() => {  
-     if (success && user) { 
-            setRedirect(true);   
-            }
-             }, [success, user]);
+
+
   return (
     <Container className="py-4 " fluid>
       <Row className="justify-content-md-center mb-4">
