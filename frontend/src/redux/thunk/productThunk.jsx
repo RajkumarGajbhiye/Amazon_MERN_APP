@@ -41,7 +41,7 @@ export const getSingleProduct = createAsyncThunk(
         },
       };
       const productData = await axios.get(
-        `http://localhost:2000/productsDetails/api/v1/products/${_id}`,
+        `${BASE_URL}${GET_SINGLE_PRODUCT_URL}/${_id}`,
         configAxios
       );
       console.log(productData.data);

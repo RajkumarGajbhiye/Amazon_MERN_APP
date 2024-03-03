@@ -33,6 +33,7 @@ const ProductDetails = () => {
   useEffect(() => {
     if (_id) {
       dispatch(getSingleProduct(_id));
+     
     }
   }, [_id]);
 

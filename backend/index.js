@@ -6,7 +6,7 @@ import userRouter from "./routes/userRoute.js"
 import productRouter from "./routes/productRoute.js"
 import bodyParser from 'body-parser';
 import orderRoutes from './routes/orderRoute.js';
-
+import paymentRoutes from './routes/paymentRoute.js';
 
 
 //database connection:
@@ -31,6 +31,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api/user",userRouter);
 app.use("/productsDetails",productRouter);
 app.use('/api/orders', orderRoutes);
+app.use('/api/v1', paymentRoutes);
 
 
 const port = process.env.PORT || 5000;

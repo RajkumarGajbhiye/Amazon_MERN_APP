@@ -3,6 +3,7 @@ import { getAllProduct, getSingleProduct } from '../thunk/productThunk';
 
 
 const initialState = {
+  refresh: false,
   isLoading: false, 
   error: null, 
   success: false, 
@@ -13,7 +14,11 @@ const initialState = {
  export const productSlice = createSlice({
   name: 'products',
   initialState,
-  reducers: {},
+  reducers: {
+    refreshComponents : (state)=>{
+      state.refresh = !state.refresh;
+    }
+  },
 
   extraReducers: (builder) => {
 
@@ -52,6 +57,6 @@ const initialState = {
   },
 })
 
-
+export const {refreshComponents} = productSlice.actions;
 export default productSlice.reducer;
  
