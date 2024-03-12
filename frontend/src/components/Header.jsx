@@ -14,24 +14,25 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { userLogout } from "../redux/thunk/userThunk";
-import Badge from 'react-bootstrap/Badge';
+import Badge from "react-bootstrap/Badge";
+import User from "./User";
 function Header() {
   const navigate = useNavigate();
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
 
-  const {cart_Array} = useSelector((state)=>state.cart)
+  const { cart_Array } = useSelector((state) => state.cart);
   const goToSignIn = () => {
     navigate("/signin");
   };
 
-  const handleLogout=()=>{
-    try{
-      dispatch(userLogout())
+  const handleLogout = () => {
+    try {
+      dispatch(userLogout());
       navigate("/signin");
-    }catch(error){
-      console.log(error)
+    } catch (error) {
+      console.log(error);
     }
-  }
+  };
   return (
     <Navbar
       bg="dark"
@@ -43,11 +44,12 @@ function Header() {
       <Container fluid>
         <Navbar.Brand>
           <Link to="/">
-          <Image
-            src="http://pngimg.com/uploads/amazon/amazon_PNG11.png"
-            alt="Logo"
-            style={{ width: "75px", marginTop: "10px" }}
-          /></Link>
+            <Image
+              src="http://pngimg.com/uploads/amazon/amazon_PNG11.png"
+              alt="Logo"
+              style={{ width: "75px", marginTop: "10px" }}
+            />
+          </Link>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="offcanvasNavbar-expand-lg" />
         <Navbar.Offcanvas
@@ -237,8 +239,9 @@ function Header() {
                   width="30"
                   src="https://img.icons8.com/dotty/80/FFFFFF/shopping-cart.png"
                   alt="shopping-cart"
-                />{cart_Array.length > 0 && (
-                  <Badge pill bg="success" style={{ marginLeft: '5px' }}>
+                />
+                {cart_Array.length > 0 && (
+                  <Badge pill bg="success" style={{ marginLeft: "5px" }}>
                     {cart_Array.reduce((a, c) => a + c.qty, 0)}
                   </Badge>
                 )}
@@ -252,10 +255,11 @@ function Header() {
                 />
               </Nav.Link>
               <Nav.Link>
-                <Image
+                {/* <Image
                   width="30"
                   src="https://img.icons8.com/external-tanah-basah-basic-outline-tanah-basah/24/FFFFFF/external-user-web-and-seo-tanah-basah-basic-outline-tanah-basah.png" alt="external-user-web-and-seo-tanah-basah-basic-outline-tanah-basah"
-                />
+                /> */}
+                <User/>
               </Nav.Link>
             </Nav>
           </Offcanvas.Body>

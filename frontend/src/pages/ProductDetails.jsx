@@ -6,7 +6,7 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import "../css/HomePage.css";
 import Image from "react-bootstrap/esm/Image";
 import Header from "../components/Header";
@@ -50,7 +50,8 @@ const ProductDetails = () => {
   return (
     <>
       <Header />
-      <Container style={{ marginTop: "10rem" }}>
+      <Container style={{ marginTop: "6rem" }}>
+      
         <Row className="my-3">
           <Col md={6}>
             <Image src={productDetails.image} alt={productDetails.name} fluid />

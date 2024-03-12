@@ -4,13 +4,19 @@ import {
   generateToken,
   authTokenVerification,
 } from "../utils/generateToken.js";
+import  cloudinary  from "cloudinary";
 
 // Register Api:
 
 const register = asyncHandler(async (req, res) => {
-  const { username, mobile,email, password, image } = req.body;
+  const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+    folder: "avatars",
+    width: 150,
+    crop: "scale",
+  });
 
-  const userExists = await User.findOne({ email });
+  const {username,mobile,email,password} = req.body;
+   const userExists = await User.findOne({ email });
 
   if (userExists) {
     res.status(400);
@@ -22,20 +28,21 @@ const register = asyncHandler(async (req, res) => {
     mobile,
     email,
     password,
-    image,
+    avatar: {
+      public_id: myCloud.public_id,
+      url: myCloud.secure_url,
+    },
   });
-
+  console.log(user)
   if (user) {
-    const { password, ...info } = user._doc;
-    res.status(201).json({
-      status: "Successful Sign Up!",
-      // ...info,
-      user
-    });
-  } else {
-    res.status(400);
-    throw new Error("Invalid user Data");
-  }
+      res.status(201).json({
+        status: "Successful Sign Up!",
+        user
+      });
+    } else {
+      res.status(400);
+      throw new Error("Invalid user Data");
+    }
 });
 
 //login
@@ -128,30 +135,60 @@ res.status(200).json({
 
   //update User Profile 
   const updateUserProfile = asyncHandler(async (req, res) => {
-    const user = await User.findById(req.user._id);
+    const newUserData = {
+      username: req.body.username,
+      email: req.body.email,
+    };
+
+    // Update avatar
+  if (req.body.avatar !== "") {
+    const user = await User.findById(req.user.id);
+
+    const image_id = user.avatar.public_id;
+    const res = await cloudinary.v2.uploader.destroy(image_id);
+
+    const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
+      folder: "avatars",
+      width: 150,
+      crop: "scale",
+    });
+
+    newUserData.avatar = {
+      public_id: result.public_id,
+      url: result.secure_url,
+    };
+  }
+
+  const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false,
+  });
+
+  res.status(200).json({
+    success: true,
+    message: "User profile update successfully",
+  });
+  });
   
-    if (user) {
-      user.name = req.body.username || user.username;
-      user.email = req.body.email || user.email;
+  //update user
+  const updateUser = asyncHandler(async (req, res, next) => {
+    const newUserData = {
+      name: req.body.name,
+      email: req.body.email,
+      role: req.body.role,
+    };
   
-      if (req.body.password) {
-        user.password = req.body.password;
-      }
+    const user = await User.findByIdAndUpdate(req.params.id, newUserData, {
+      new: true,
+      runValidators: true,
+      useFindAndModify: false,
+    });
   
-      const updatedUser = await user.save();
-  
-      res.json({
-        _id: updatedUser._id,
-        username: updatedUser.username,
-        mobile: updatedUser.mobile,
-        email: updatedUser.email,
-        isAdmin: updatedUser.isAdmin,
-      });
-    } else {
-      res.status(404);
-      throw new Error('User not found');
-    }
+    res.status(200).json({
+      success: true,
+    });
   });
   
   
-export { register, login, protect,logoutUser,getUserProfile,updateUserProfile};
+export { register, login, protect,logoutUser,getUserProfile,updateUserProfile,updateUser};

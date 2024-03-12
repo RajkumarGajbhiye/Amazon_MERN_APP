@@ -23,7 +23,7 @@ export const createOrder = createAsyncThunk(
       
       return orderData.data;
       if(orderData.data){
-        localStorage.setItem('user', JSON.stringify(response.data))
+        localStorage.setItem('user', JSON.stringify(orderData.data))
     }
     } catch (error) {
       return rejectWithValue(error.message);

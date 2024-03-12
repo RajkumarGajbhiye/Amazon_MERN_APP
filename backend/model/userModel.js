@@ -35,10 +35,16 @@ minlength:[6,"Password must be at least 6 characters"]
         default:false,
 
     },
-    image: { 
-        type: String,
-        default:"https://www.shutterstock.com/image-illustration/3d-render-attractive-cartoon-character-260nw-1933348058.jpg"
-    },
+    avatar: {
+        public_id: {
+          type: String,
+          required: true,
+        },
+        url: {
+          type: String,
+          required: true,
+        },
+      },
 },
 {
     timestamps:true

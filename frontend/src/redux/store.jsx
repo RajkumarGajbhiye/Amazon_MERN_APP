@@ -5,6 +5,8 @@ import productSlice from './slice/productSlice';
 import userLogoutSlice from './slice/userLogoutSlice';
 import cartSlice from './slice/cartSlice';
 import orderSlice from './slice/orderSlice';
+import updateUserProfileSlice from './slice/updateUserProfileSlice';
+import userProfileSlice from './slice/userProfileSlice';
 
 export const store = configureStore({
   reducer: {
@@ -14,5 +16,7 @@ export const store = configureStore({
     products:productSlice,
     cart:cartSlice,
     order:orderSlice,
+    updateuserprofile:updateUserProfileSlice,
+    userprofile:userProfileSlice,
   },
 })

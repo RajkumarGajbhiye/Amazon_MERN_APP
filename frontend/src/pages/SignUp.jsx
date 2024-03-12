@@ -7,24 +7,30 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Image from "react-bootstrap/Image";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch,useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { userSignUp } from "../redux/thunk/userThunk";
 
 const SignUp = () => {
   const dispatch = useDispatch();
   const [errorMessage, setErrorMessage] = useState({});
-  const [imagePreview, setImagePreview] = useState("");
+
   const [validated, setValidated] = useState(false);
   const navigate = useNavigate();
- const {user,success,error,isLoading} = useSelector((state)=>state.signUp)
+  const { user, success, error, isLoading } = useSelector(
+    (state) => state.signUp
+  );
 
   let [signup, setSignup] = useState({
     username: "",
     mobile: "",
     email: "",
     password: "",
-    image: null,
+    avatar: "",
   });
+
+  const { username, mobile, email, password,image } = signup;
+  const [avatar, setAvatar] = useState("/avtar.jpg");
+  const [avatarPreview, setAvatarPreview] = useState("/avtar.jpg");
 
   //validation function:
   const validate = (values) => {
@@ -43,95 +49,85 @@ const SignUp = () => {
     }
     if (!values.password) {
       errors.password = "! Enter your password";
-    } 
-    else if (values.password.length < 6) {
-     return errors.password = "! Password should at least 6 characters";
+    } else if (values.password.length < 6) {
+      return (errors.password = "! Password should at least 6 characters");
     }
-   
+    if (!values.avatar) {
+      errors.avatar = "! upload image";
+    }
+
     return errors;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(signup)
+    console.log(signup);
     try {
       const form = e.currentTarget;
       if (form.checkValidity() === false) {
-        e.preventDefault();
-        e.stopPropagation();
-        
+        setValidated(true);
       }
-      setErrorMessage(validate(signup));
+
+      const errors = validate(signup);
+      setErrorMessage(errors);
+
       if (
-        signup.username &&
-        signup.mobile &&
-        signup.email &&
-        signup.password && 
-        signup.image 
+        Object.keys(errors).length >= 0 &&
+        username !== "" &&
+        mobile !== "" &&
+        email !== "" &&
+        password !== "" &&
+        avatar !== ""
       ) {
-        dispatch(userSignUp(signup));
-        
-        setSignup({
-          username: "",
-          mobile: "",
-          email: "",
-          password: "",
-          image: "",
-        });
+        const myForm = new FormData();
+        myForm.set("username", username);
+        myForm.set("mobile", mobile);
+        myForm.set("email", email);
+        myForm.set("password", password);
+        myForm.set("avatar", avatar);
+        dispatch(userSignUp(myForm));
         navigate("/signin");
       }
-      setValidated(true);
     } catch (error) {
       console.log(error.message);
+      setValidated(false);
     }
   };
 
   const handleChange = (e) => {
-    setSignup({ ...signup, [e.target.name]: e.target.value });
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setSignup({
-        ...signup,
-        image: JSON.stringify(file),
-      });
-
-      //The FileReader object lets web applications asynchronously read the contents of files (or raw data buffers) stored on the user's computer, using File or Blob objects to specify the file or data to read.
+    if (e.target.name === "avatar") {
       const reader = new FileReader();
-      //The loadend event is fired when a file read has completed, successfully or not.
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
+
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setAvatarPreview(reader.result);
+          setAvatar(reader.result);
+        }
       };
-      /*
-The readAsDataURL method of the FileReader interface is used to read the contents of the specified Blob or File.
-When the read operation is finished,
-the readyState becomes DONE, and
-the loadend is triggered.
-At that time, the result attribute contains the data as a data: URL representing the file's data as a base64 encoded string.
-    */
-      reader.readAsDataURL(file);
+
+      reader.readAsDataURL(e.target.files[0]);
+    } else {
+      setSignup({ ...signup, [e.target.name]: e.target.value });
     }
   };
 
- 
-    // useEffect(()=>{
-    //   if(!error){
-    //     navigate("/signin") 
-    //   }
-    // },[error])
+  const redirect = location.search ? location.search.split("=")[1] : "/account";
 
+  // useEffect(()=>{
+  //   if(!error){
+  //     navigate("/signin")
+  //   }
+  // },[error])
 
   return (
     <Container className="py-4 " fluid>
       <Row className="justify-content-md-center mb-4">
         <Col md="auto">
           <Link to="/">
-          <Image
-            width="100"
-            src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"
-          />
+            <Image
+              width="100"
+              src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"
+            />
           </Link>
         </Col>
       </Row>
@@ -142,12 +138,11 @@ At that time, the result attribute contains the data as a data: URL representing
             <Card.Body>
               <Card.Title>
                 <div>
-                <h2>Create Account</h2>
+                  <h2>Create Account</h2>
                 </div>
               </Card.Title>
 
               <>
-              
                 <Form noValidate validated={validated} onSubmit={handleSubmit}>
                   <Form.Group className="mb-3 w-70">
                     <Form.Label>Your Name</Form.Label>
@@ -157,7 +152,7 @@ At that time, the result attribute contains the data as a data: URL representing
                       placeholder="First and Last Name"
                       size="sm"
                       name="username"
-                      value={signup.username}
+                      value={username}
                       onChange={handleChange}
                     />
                     <Form.Control.Feedback type="invalid">
@@ -173,7 +168,7 @@ At that time, the result attribute contains the data as a data: URL representing
                       placeholder="Mobile Number"
                       size="sm "
                       name="mobile"
-                      value={signup.mobile}
+                      value={mobile}
                       onChange={handleChange}
                     />
                     <Form.Control.Feedback type="invalid">
@@ -189,7 +184,7 @@ At that time, the result attribute contains the data as a data: URL representing
                       placeholder="Enter Email"
                       size="sm"
                       name="email"
-                      value={signup.email}
+                      value={email}
                       onChange={handleChange}
                     />
                     <Form.Control.Feedback type="invalid">
@@ -205,7 +200,7 @@ At that time, the result attribute contains the data as a data: URL representing
                       placeholder="At least 6 character"
                       size="sm"
                       name="password"
-                      value={signup.password}
+                      value={password}
                       onChange={handleChange}
                     />
                     <Form.Control.Feedback type="invalid">
@@ -214,37 +209,40 @@ At that time, the result attribute contains the data as a data: URL representing
                   </Form.Group>
 
                   <Form.Group className="mb-3 mt-5 d-flex flex-direction-row">
-                    {imagePreview ? (
-                      <Image
-                        width="100px"
-                        src={imagePreview}
-                        alt="selected"
-                        style={{ position: "relative", bottom: "12px" }}
-                        roundedCircle
-                      />
-                    ) : (
-                      <Image
-                        width="60px"
-                        src="https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png"
-                        alt="selected"
-                        roundedCircle
-                      />
-                    )}
+                    <Image
+                    required
+                      width="60px"
+                      src={avatarPreview}
+                      alt="Avatar Preview"
+                      style={{ position: "relative", bottom: "6px" }}
+                      roundedCircle
+                    />
                     <Form.Control
                       required
                       type="file"
                       className="h-25"
-                      onChange={handleImageChange}
+                      name="avatar"
+                      accept="image/*"
+                      style={{ position: "relative", bottom: "6px" }}
+                      onChange={handleChange}
                     />
+                    <Form.Control.Feedback type="invalid">
+                      {errorMessage.avatar}
+                    </Form.Control.Feedback>
                   </Form.Group>
 
                   <Container className="d-grid gap-2">
-                    <Button type="submit" variant="warning" size="lg" style={{fontSize:"14px"}}>
+                    <Button
+                      type="submit"
+                      variant="warning"
+                      size="lg"
+                      style={{ fontSize: "14px" }}
+                      isLoading={isLoading}
+                    >
                       Sign up
                     </Button>
                   </Container>
                 </Form>
-               
               </>
             </Card.Body>
             <Card.Footer>
@@ -298,4 +296,3 @@ At that time, the result attribute contains the data as a data: URL representing
 };
 
 export default SignUp;
-

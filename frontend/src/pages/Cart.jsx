@@ -20,7 +20,7 @@ const Cart = () => {
 
   const {cart_Array} = useSelector((state) => state.cart);
   const {signIn} = useSelector((state)=>state.signIn)
-
+console.log(cart_Array)
   // NOTE: no need for an async function here as we are not awaiting the
   // resolution of a Promise
   const addToCartHandler = (product, qty) => {

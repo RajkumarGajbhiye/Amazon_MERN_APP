@@ -6,13 +6,19 @@ const initialState = {
   isLoading: false, 
   error: null, 
   success: false, 
-  
+  orders: [],
+  currentOrder: null,
+  totalOrders: 0
 }
 
  export const orderSlice = createSlice({
   name: 'order',
   initialState,
-  reducers: {},
+  reducers: {
+    resetOrder: (state) => {
+      state.currentOrder = null;
+    },
+  },
 
   extraReducers: (builder) => {
 
@@ -23,20 +29,20 @@ const initialState = {
         state.error = null;
     })
      .addCase(createOrder.fulfilled, (state, action) => {
-      state.products_Array = action.payload,
       state.isLoading = false;
-      state.success = true;      
+      state.success = true; 
+      state.orders.push(action.payload);  
+      state.currentOrder = action.payload;   
     })
     .addCase(createOrder.rejected, (state, action) => {
       state.isLoading = false;
-      state.error = action.error.message; 
-      state.products_Array = null     
+      state.error = action.error.message;     
     })
 
     
   },
 })
-
-
+export const selectCurrentOrder = (state) => state.order.currentOrder;
+export const { resetOrder } = orderSlice.actions;
 export default orderSlice.reducer;
  

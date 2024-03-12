@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import {USERS_LOGOUT_URL, USERS_SIGNIN_URL, USERS_SIGNUP_URL } from "../../api/api"
+import {GET_USER_PROFILE_URL, UPDATE_USER_PROFILE_URL, USERS_LOGOUT_URL, USERS_SIGNIN_URL, USERS_SIGNUP_URL } from "../../api/api"
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -64,6 +64,51 @@ export const userLogout = createAsyncThunk(
             const response=await axios.post(`${BASE_URL}${USERS_LOGOUT_URL}`,logout,configAxios);
             if(response.data.success){
                 localStorage.removeItem('user')
+            }
+       console.log(response.data)
+    return response.data;
+        }catch(error){
+return rejectWithValue(error.message)
+        }
+    }
+)
+
+
+export const update_user_Profile = createAsyncThunk(
+    'user/fetchUpdateProfileApi',
+    async(update,{rejectWithValue})=>{
+        try{
+           
+            const config = {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              };
+            const response=await axios.put(`${BASE_URL}${UPDATE_USER_PROFILE_URL}`,update,config);
+            if(response.data){
+                localStorage.setItem('user', JSON.stringify(response.data))
+            }
+       console.log(response.data)
+    return response.data;
+        }catch(error){
+return rejectWithValue(error.message)
+        }
+    }
+)
+
+export const get_user_Profile = createAsyncThunk(
+    'user/fetchGetProfileApi',
+    async(user,{rejectWithValue})=>{
+        try{
+           
+            const config = {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              };
+            const response=await axios.put(`${BASE_URL}${GET_USER_PROFILE_URL}`,user,config);
+            if(response.data){
+                localStorage.setItem('user', JSON.stringify(response.data))
             }
        console.log(response.data)
     return response.data;

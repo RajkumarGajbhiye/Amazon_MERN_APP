@@ -1,12 +1,14 @@
 import mongoose from "mongoose";
 import cors from 'cors';
 import express from "express";
+import bodyParser from 'body-parser';
 import config from"./config.js";
 import userRouter from "./routes/userRoute.js"
 import productRouter from "./routes/productRoute.js"
-import bodyParser from 'body-parser';
 import orderRoutes from './routes/orderRoute.js';
 import paymentRoutes from './routes/paymentRoute.js';
+import cookieParser from 'cookie-parser';
+import cloudinary  from "cloudinary";
 
 
 //database connection:
@@ -24,15 +26,23 @@ mongoose.connect(DB_Connection_String).then(con=> console.log("Database connecti
 
 const app = express();
 
+app.use(cookieParser())
+app.use(bodyParser.json())
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use("/api/user",userRouter);
 app.use("/productsDetails",productRouter);
 app.use('/api/orders', orderRoutes);
-app.use('/api/v1', paymentRoutes);
+app.use(paymentRoutes);
 
+//cloudinary logic:
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
 
 const port = process.env.PORT || 5000;
 
