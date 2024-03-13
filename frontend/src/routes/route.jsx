@@ -8,6 +8,8 @@ import SignIn from "../pages/SignIn";
 import SignUp from "../pages/SignUp";
 import Success from "../pages/Success";
 import UpdateUserProfile from "../pages/UpdateUserProfile";
+import UserOrder from "../pages/UserOrder";
+import UserOrderDetails from "../pages/UserOrderDetails";
 import UserProfile from "../pages/UserProfile";
 
 const route = [
@@ -54,7 +56,15 @@ const route = [
   {
     path:"/update/user/profile",
     element:<UpdateUserProfile/>
-  }
+  },
+  {
+    path:"/user/order",
+    element:<UserOrder/>
+  },
+  {
+    path:"/user/order/details/:id",
+    element:<UserOrderDetails/>
+  },
 ];
 
 export default route;

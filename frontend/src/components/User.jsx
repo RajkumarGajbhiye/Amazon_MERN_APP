@@ -4,9 +4,9 @@ import { Link, useNavigate } from "react-router-dom";
 import "../css/User.css";
 import { IoSettingsOutline } from 'react-icons/io5'
 import { BsBagCheck } from "react-icons/bs";
-import { AiOutlineHeart } from "react-icons/ai";
 import { RxDashboard } from "react-icons/rx";
 import { BiLogOut } from "react-icons/bi";
+import { userLogout } from "../redux/thunk/userThunk";
 
 const User = () => {
   let loginUser = false;
@@ -16,17 +16,23 @@ const User = () => {
     setProfileOpen(null);
   };
 
-  //   const dispatch = useDispatch();
-  //   const navigate = useNavigate();
-  const { user, isLoading } = useSelector((state) => state.signIn);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user, isLoading } = useSelector((state) => state.signUp);
+  
+
+  console.log(user)
   if (user) {
     loginUser = true;
   }
-    const logoutHandler = () => {
-      //dispatch(logout());
-      toast.success('Logged out successfully')
-      navigate('/login')
-    };
+  const handleLogout = () => {
+    try {
+      dispatch(userLogout());
+      navigate("/signin");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <div className="profile">
@@ -45,16 +51,16 @@ const User = () => {
             {profileOpen && (
               <div className="openProfile boxItems" onClick={close}>
                 <div className="image">
-                  <Link to="/me">
+                  <Link to="/user_profile">
                     <div className="img">
                       <img
                         src={user.avatar && user.avatar.url}
-                        alt={user && user.name}
+                        alt={user && user.username}
                       />
                     </div>
                   </Link>
                   <div className="text">
-                    <h4>{user.name}</h4>
+                    <h4>{user.username}</h4>
                     <label>
                       {user && user.role === "admin"
                         ? "Admin"
@@ -62,7 +68,7 @@ const User = () => {
                     </label>
                   </div>
                 </div>
-                <Link to="/me">
+                <Link to="/user_profile">
                   <button className="box">
                     <IoSettingsOutline className="icon" />
                     <h4>My Account</h4>
@@ -70,7 +76,7 @@ const User = () => {
                 </Link>
 
                 {user && user.role !== "admin" ? (
-                  <Link to="/orders/me">
+                  <Link to="/user/order">
                     <button className="box">
                       <BsBagCheck className="icon" />
                       <h4>My Order</h4>
@@ -84,8 +90,8 @@ const User = () => {
                     </button>
                   </Link>
                 )}
-                <Link to="/">
-                  <button className="box" onClick={logoutHandler}>
+                <Link>
+                  <button className="box" onClick={handleLogout}>
                     <BiLogOut className="icon" />
                     <h4>Log Out</h4>
                   </button>

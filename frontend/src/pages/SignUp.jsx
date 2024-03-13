@@ -28,7 +28,7 @@ const SignUp = () => {
     avatar: "",
   });
 
-  const { username, mobile, email, password,image } = signup;
+  const { username, mobile, email, password, image } = signup;
   const [avatar, setAvatar] = useState("/avtar.jpg");
   const [avatarPreview, setAvatarPreview] = useState("/avtar.jpg");
 
@@ -86,6 +86,7 @@ const SignUp = () => {
         myForm.set("password", password);
         myForm.set("avatar", avatar);
         dispatch(userSignUp(myForm));
+
         navigate("/signin");
       }
     } catch (error) {
@@ -112,12 +113,6 @@ const SignUp = () => {
   };
 
   const redirect = location.search ? location.search.split("=")[1] : "/account";
-
-  // useEffect(()=>{
-  //   if(!error){
-  //     navigate("/signin")
-  //   }
-  // },[error])
 
   return (
     <Container className="py-4 " fluid>
@@ -208,27 +203,31 @@ const SignUp = () => {
                     </Form.Control.Feedback>
                   </Form.Group>
 
-                  <Form.Group className="mb-3 mt-5 d-flex flex-direction-row">
-                    <Image
-                    required
-                      width="60px"
-                      src={avatarPreview}
-                      alt="Avatar Preview"
-                      style={{ position: "relative", bottom: "6px" }}
-                      roundedCircle
-                    />
-                    <Form.Control
-                      required
-                      type="file"
-                      className="h-25"
-                      name="avatar"
-                      accept="image/*"
-                      style={{ position: "relative", bottom: "6px" }}
-                      onChange={handleChange}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errorMessage.avatar}
-                    </Form.Control.Feedback>
+                  <Form.Group className="my-3">
+                    <Row>
+                      <Col md={3}>
+                        <Image
+                          required
+                          width="100vw"
+                          src={avatarPreview}
+                          alt="Avatar Preview"
+                          roundedCircle
+                        />
+                      </Col>
+                      <Col>
+                        <Form.Control
+                          required
+                          type="file"
+                          className="mt-3"
+                          name="avatar"
+                          accept="assets/user_avtar*"
+                          onChange={handleChange}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {errorMessage.avatar}
+                        </Form.Control.Feedback>
+                      </Col>
+                    </Row>
                   </Form.Group>
 
                   <Container className="d-grid gap-2">
@@ -237,7 +236,7 @@ const SignUp = () => {
                       variant="warning"
                       size="lg"
                       style={{ fontSize: "14px" }}
-                      isLoading={isLoading}
+                      disabled={isLoading ? true : false}
                     >
                       Sign up
                     </Button>

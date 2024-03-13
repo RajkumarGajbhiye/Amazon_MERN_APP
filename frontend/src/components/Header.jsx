@@ -16,23 +16,25 @@ import { useDispatch, useSelector } from "react-redux";
 import { userLogout } from "../redux/thunk/userThunk";
 import Badge from "react-bootstrap/Badge";
 import User from "./User";
+import { useState } from "react";
 function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [show, setShow] = useState(false);
+  const [target, setTarget] = useState(null);
 
+  const handleClick = (event) => {
+    setShow(!show);
+    setTarget(event.target);
+  };
   const { cart_Array } = useSelector((state) => state.cart);
+  const { user } = useSelector((state) => state.signUp);
+
   const goToSignIn = () => {
     navigate("/signin");
   };
 
-  const handleLogout = () => {
-    try {
-      dispatch(userLogout());
-      navigate("/signin");
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  
   return (
     <Navbar
       bg="dark"
@@ -199,6 +201,9 @@ function Header() {
               </NavDropdown>
 
               <OverlayTrigger
+               show={show}
+               target={target}
+               
                 placement="bottom"
                 delay={{ show: 750, hide: 1000 }}
                 overlay={
@@ -212,18 +217,16 @@ function Header() {
                       <p>
                         New Customer? <Link to="/signup">start here</Link>
                       </p>
-                      <h5>Your Account</h5>
-                      <p>your Account</p>
-                      <p>your orders</p>
+                      
                     </div>
                   </Tooltip>
                 }
               >
                 <Nav.Link>
-                  Hellow sign in Account & List
+                  Hellow,{user.username} Account & List
                   <Image
-                    onClick={() => setSmShow(true)}
-                    className=""
+                    onClick={handleClick}
+                    
                     width="25"
                     height="15"
                     src="https://img.icons8.com/sf-black-filled/64/FFFFFF/circled-chevron-down.png"
@@ -246,19 +249,8 @@ function Header() {
                   </Badge>
                 )}
               </Nav.Link>
+              
               <Nav.Link>
-                <Image
-                  width="30"
-                  src="https://img.icons8.com/dotty/80/FFFFFF/logout-rounded-up.png"
-                  alt="logout-rounded-up"
-                  onClick={handleLogout}
-                />
-              </Nav.Link>
-              <Nav.Link>
-                {/* <Image
-                  width="30"
-                  src="https://img.icons8.com/external-tanah-basah-basic-outline-tanah-basah/24/FFFFFF/external-user-web-and-seo-tanah-basah-basic-outline-tanah-basah.png" alt="external-user-web-and-seo-tanah-basah-basic-outline-tanah-basah"
-                /> */}
                 <User/>
               </Nav.Link>
             </Nav>

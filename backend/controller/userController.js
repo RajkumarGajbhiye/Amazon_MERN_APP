@@ -174,7 +174,7 @@ res.status(200).json({
   //update user
   const updateUser = asyncHandler(async (req, res, next) => {
     const newUserData = {
-      name: req.body.name,
+      username: req.body.username,
       email: req.body.email,
       role: req.body.role,
     };

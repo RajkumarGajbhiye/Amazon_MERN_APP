@@ -10,7 +10,7 @@ import {
 import { protect} from '../controller/userController.js';
 
 router.route('/').post(protect, addOrderItems).get(protect,getOrders);
-router.route('/mine').get(protect, getMyOrders);
+router.route('/user').get(protect, getMyOrders);
 router.route('/:id').get(protect, getOrderById);
 router.route('/:id/deliver').put(protect,updateOrderToDelivered);
 

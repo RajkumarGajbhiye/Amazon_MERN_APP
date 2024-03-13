@@ -16,7 +16,7 @@ const Payment = () => {
     }
   }, [navigate, shippingAddress]);
 
-  const [paymentMethod, setPaymentMethod] = useState('PayPal');
+  const [paymentMethod, setPaymentMethod] = useState('RAZORPAY');
 
   const dispatch = useDispatch();
 
@@ -39,7 +39,19 @@ const Payment = () => {
             <Form.Check
               className='my-2'
               type='radio'
-              label='PayPal or Credit Card'
+              label='UPI'
+              id='PayPal'
+              name='paymentMethod'
+              value='PayPal'
+              checked
+              onChange={(e) => setPaymentMethod(e.target.value)}
+            ></Form.Check>
+          </Col>
+          <Col>
+            <Form.Check
+              className='my-2'
+              type='radio'
+              label='Card'
               id='PayPal'
               name='paymentMethod'
               value='PayPal'

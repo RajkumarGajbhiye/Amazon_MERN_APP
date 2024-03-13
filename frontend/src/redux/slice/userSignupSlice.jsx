@@ -9,7 +9,7 @@ const initialState = {
   isLoading: false, // Flag for loading state
   error: null, // Store any errors
   success: false, // Indicate successful registration
-  user: user ? user : null,
+  user: {},
 }
 
  export const userSignUpSlice = createSlice({

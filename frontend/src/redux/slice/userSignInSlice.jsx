@@ -8,8 +8,8 @@ const user = JSON.parse(localStorage.getItem('user'))
     isLoading: false, // Flag for loading state
     error: null, // Store any errors
     success: false, // Indicate successful registration
-   user :user ? user : null
-    
+   user :user ? user : null,
+
   }
 
   export const userSignInSlice = createSlice({

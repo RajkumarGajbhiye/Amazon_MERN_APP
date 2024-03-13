@@ -11,9 +11,9 @@ export const GET_SINGLE_PRODUCT_URL = '/productsDetails/api/v1/products';
 //ORDER
 export const CREATE_ORDER_URL = '/api/orders/';
 export const GET_ORDERS_URL = '/api/orders/';
-export const GET_MY_ORDERS_URL = '/api/orders/mine';
+export const GET_USER_ORDERS_URL = '/api/orders/user';
 export const GET_ORDER_BY_ID_URL = '/api/orders/:id';
-export const UPDATE_ORDER_TO_DELIEVERED_URL = "/api/orders/:id/deliver"
+export const UPDATE_ORDER_TO_DELIEVERED_URL = "/api/orders/:id/deliver";
 
 //USER PROFILE
 export const UPDATE_USER_PROFILE_URL = '/api/user/profile/update';

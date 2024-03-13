@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import {GET_USER_PROFILE_URL, UPDATE_USER_PROFILE_URL, USERS_LOGOUT_URL, USERS_SIGNIN_URL, USERS_SIGNUP_URL } from "../../api/api"
+import { useSelector } from "react-redux";
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -15,12 +16,12 @@ export const userSignUp = createAsyncThunk(
             }
             const response=await axios.post(`${BASE_URL}${USERS_SIGNUP_URL}`,userdata,configAxios);
            
-            if (response.data) {
+            if (response.data.user) {
                 localStorage.setItem('user', JSON.stringify(response.data))
               }
            
-           
-    return response;
+          
+    return response.data.user;
         }catch(error){
 return rejectWithValue(error.message)
         }
@@ -65,7 +66,7 @@ export const userLogout = createAsyncThunk(
             if(response.data.success){
                 localStorage.removeItem('user')
             }
-       console.log(response.data)
+      
     return response.data;
         }catch(error){
 return rejectWithValue(error.message)
@@ -76,20 +77,21 @@ return rejectWithValue(error.message)
 
 export const update_user_Profile = createAsyncThunk(
     'user/fetchUpdateProfileApi',
-    async(update,{rejectWithValue})=>{
+    async(update,{rejectWithValue},{ getState })=>{
         try{
-           
-            const config = {
+            const authToken = getState().auth.token;            const config = {
                 headers: {
                   "Content-Type": "multipart/form-data",
+                  Authorization: `Bearer ${authToken}`,
                 },
+
               };
-            const response=await axios.put(`${BASE_URL}${UPDATE_USER_PROFILE_URL}`,update,config);
+            const {response}=await axios.put(`${BASE_URL}${UPDATE_USER_PROFILE_URL}`,update,config);
             if(response.data){
                 localStorage.setItem('user', JSON.stringify(response.data))
             }
-       console.log(response.data)
-    return response.data;
+       console.log(response)
+    return response;
         }catch(error){
 return rejectWithValue(error.message)
         }
@@ -110,7 +112,7 @@ export const get_user_Profile = createAsyncThunk(
             if(response.data){
                 localStorage.setItem('user', JSON.stringify(response.data))
             }
-       console.log(response.data)
+       
     return response.data;
         }catch(error){
 return rejectWithValue(error.message)

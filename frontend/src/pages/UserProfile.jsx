@@ -1,67 +1,84 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import "../css/UserProfile.css";
+import Loader from "../components/Loader";
+import Header from "../components/Header";
+import ListGroup from "react-bootstrap/ListGroup";
+import { Col, Container, Image, Row } from "react-bootstrap";
+import Button from "react-bootstrap/Button";
 
-import { MetaData, Loader } from "../../../allComponents";
-
-import "./Profile.css";
 const UserProfile = () => {
-  const { user, isLoading } = useSelector((state) => state.signIn);
+  const { user, isLoading } = useSelector((state) => state.signUp);
+  const navigate = useNavigate();
+  const handleNavigateUserOrder = () => {
+    navigate("/user/order");
+  };
   return (
     <>
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <>
-          <MetaData title={`${user.name}-profile`} />
-          <h2 className="title">My Profile</h2>
-          <div className="profile__box">
-            <div className="profile__img">
-              <figure className="avatar avatar__profile">
-                <img
-                  className="rounded-circle img-fluid"
+      <Header />
+      <br />
+      <br />
+      <br />
+      <br />
+      <Container>
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+            <h2 className="text-center">User Profile</h2>
+            <Row className="my-5">
+              <Col md={6}>
+                <Image
+                  className="avatar"
                   src={user.avatar?.url}
                   alt={user.username}
-                  style={{width: '100%'}}
+                  roundedCircle
                 />
-              </figure>
-              <div className="changing__style">
-                <Link
-                  to="/me/update"
-                  id="edit_profile"
-                  className="btns"
-                  style={{ textDecoration: "none", fontWeight: 'bold', color: 'black' }}
-                >
-                  Edit Profile
-                </Link>
-                <Link
-                  to="/password/update"
-                  className="btns change__password"
-                  style={{ textDecoration: "none", fontWeight: 'bold', color: 'black' }}
-                >
-                  Change Password
-                </Link>
-              </div>
-            </div>
-            <div className="profile__details">
-              <h4 className="profile__details_title">Full Name</h4>
-              <p className="profile__details_title_info">{user.name}</p>
+                <Row className="my-3 mx-4">
+                  <Col>
+                    <Button
+                      variant="info"
+                      onClick={() => navigate("/update/user/profile")}
+                    >
+                      Edit Profile
+                    </Button>
+                  </Col>
+                </Row>
+              </Col>
 
-              <h4 className="profile__details_title">Email Address</h4>
-              <p className="profile__details_title_info">{user.email}</p>
+              <Col md={3}>
+                <ListGroup>
+                  <ListGroup.Item variant="success">
+                    <h5>Full Name: {user.username}</h5>{" "}
+                  </ListGroup.Item>
+                  <ListGroup.Item variant="success">
+                    <h5>Mobile No: {user.mobile}</h5>
+                  </ListGroup.Item>
+                  <ListGroup.Item variant="success">
+                    <h5>Email Address: {user.email}</h5>
+                  </ListGroup.Item>
+                  <ListGroup.Item variant="success">
+                    <h5>
+                      Joined On: {String(user?.createdAt).substring(0, 10)}
+                    </h5>
+                  </ListGroup.Item>
 
-              <h4 className="profile__details_title">Joined On</h4>
-              <p className="profile__details_title_info">{String(user.createdAt).substring(0, 10)}</p>
-
-              {user.role !== "admin" && (
-                <Link to="/orders/me" className="btns order__btn"
-                  style={{ textDecoration: "none", fontWeight: 'bold', color: 'black' }}>
-                  My Orders
-                </Link>
-              )}
-            </div>
-          </div>
-        </>
-      )}
+                  <ListGroup.Item variant="success">
+                    {user.role !== "admin" && (
+                      <Button
+                        variant="warning" className="mx-auto d-block"
+                        onClick={handleNavigateUserOrder}
+                      >
+                        My Orders
+                      </Button>
+                    )}
+                  </ListGroup.Item>
+                </ListGroup>
+              </Col>
+            </Row>
+          </>
+        )}
+      </Container>
     </>
   );
 };
