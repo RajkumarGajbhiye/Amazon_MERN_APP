@@ -47,16 +47,18 @@ const redirect = location.search ? location.search.split("=")[1] : "/";
 e.preventDefault();
 try {
   const form = e.currentTarget;
+ 
   if (form.checkValidity() === false) {
     e.preventDefault();
     e.stopPropagation();
   }
   const validationErrors = validate(signin);
       setErrorMessage(validationErrors);
-      console.log(validationErrors)
+      
       if (Object.keys(validationErrors).length === 0) {
   
            await dispatch(userSignIn(signin));
+           console.log(signin)
            navigate(redirect);
 setSignin({
 email: "",

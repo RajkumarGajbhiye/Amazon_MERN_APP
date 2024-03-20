@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-// import { MDBDataTable } from "mdbreact";
+ import { MDBDataTable } from "mdbreact";
 import { useDispatch, useSelector } from "react-redux";
 import '../css/UserOrder.css';
 import { user_all_order } from "../redux/thunk/orderThunk";
@@ -12,6 +12,7 @@ const UserOrder = () => {
 
   const { isLoading, error, orders } = useSelector((state) => state.order);
 
+  console.log(orders)
   useEffect(() => {
     dispatch(user_all_order());
   }, [dispatch]);
@@ -77,7 +78,7 @@ const UserOrder = () => {
 
       <h1 className="my-5 section__p1">My Orders</h1>
 
-      {/* {isLoading ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <MDBDataTable
@@ -87,7 +88,7 @@ const UserOrder = () => {
           striped
           hover
         />
-      )} */}
+      )}
     </>
   );
 };

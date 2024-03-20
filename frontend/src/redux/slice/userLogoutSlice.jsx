@@ -7,7 +7,7 @@ import { userLogout } from '../thunk/userThunk';
     isLoading: false, // Flag for loading state
     error: null, // Store any errors
    user : null,
-    
+   isAuthenticated: false,
   }
 
   export const userLogoutSlice = createSlice({
@@ -23,7 +23,8 @@ import { userLogout } from '../thunk/userThunk';
       })
        .addCase(userLogout.fulfilled, (state) => {
         state.user = null,
-        state.isLoading = false;     
+        state.isLoading = false;  
+        state.isAuthenticated = false   
       })
       .addCase(userLogout.rejected, (state, action) => {
         state.isLoading = false;

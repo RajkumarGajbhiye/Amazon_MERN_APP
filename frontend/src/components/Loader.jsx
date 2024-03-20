@@ -1,5 +1,5 @@
 import React from 'react'
-import { Spinner } from 'react-bootstrap'
+import { Col, Container, Row, Spinner } from 'react-bootstrap'
 import "../css/HomePage.css"
 const Loader = () => {
   return (

@@ -34,11 +34,14 @@ export const createOrder = createAsyncThunk(
 
 export const user_all_order = createAsyncThunk(
   "order/getUserAllOrder",
-  async (order, { rejectWithValue }) => {
+  async (order, { rejectWithValue },{ getState }) => {
     try {
+      const authToken = getState().auth.token; 
+      console.log(authToken)
       const configAxios = {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
         },
       };
       const orderData = await axios.get(
@@ -49,6 +52,8 @@ export const user_all_order = createAsyncThunk(
       if(orderData.data){
         localStorage.setItem('user', JSON.stringify(orderData.data))
     }
+    console.log(orderData.data);
+    
       return orderData.data;
       
     } catch (error) {

@@ -44,7 +44,7 @@ export const getSingleProduct = createAsyncThunk(
         `${BASE_URL}${GET_SINGLE_PRODUCT_URL}/${_id}`,
         configAxios
       );
-      console.log(productData.data);
+      
       return productData.data;
     } catch (error) {
       return rejectWithValue(error.message);

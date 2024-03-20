@@ -3,6 +3,7 @@ import axios from "axios";
 import {GET_USER_PROFILE_URL, UPDATE_USER_PROFILE_URL, USERS_LOGOUT_URL, USERS_SIGNIN_URL, USERS_SIGNUP_URL } from "../../api/api"
 import { useSelector } from "react-redux";
 
+
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const userSignUp = createAsyncThunk(
@@ -35,7 +36,7 @@ export const userSignIn = createAsyncThunk(
         try{
            
             const configAxios={
-                "headers":{
+                headers:{
                     'Content-Type': 'application/json',
                 }
             }
@@ -43,7 +44,7 @@ export const userSignIn = createAsyncThunk(
             if(response.data){
                 localStorage.setItem('user', JSON.stringify(response.data))
             }
-       
+      
     return response.data;
         }catch(error){
 return rejectWithValue(error.message)
@@ -77,23 +78,26 @@ return rejectWithValue(error.message)
 
 export const update_user_Profile = createAsyncThunk(
     'user/fetchUpdateProfileApi',
-    async(update,{rejectWithValue},{ getState })=>{
+    async(update)=>{
+     
         try{
-            const authToken = getState().auth.token;            const config = {
+            const token = localStorage.getItem("user")   
+            const config = {
                 headers: {
-                  "Content-Type": "multipart/form-data",
-                  Authorization: `Bearer ${authToken}`,
+                
+                    authorization: `Bearer ${token}`,
                 },
 
               };
-            const {response}=await axios.put(`${BASE_URL}${UPDATE_USER_PROFILE_URL}`,update,config);
+            const response =await axios.put(`${BASE_URL}${UPDATE_USER_PROFILE_URL}`,update,config);
             if(response.data){
                 localStorage.setItem('user', JSON.stringify(response.data))
             }
-       console.log(response)
-    return response;
+       console.log(response.data.user)
+       console.log(token)
+    return response.data.user;
         }catch(error){
-return rejectWithValue(error.message)
+console.log(error.message)
         }
     }
 )

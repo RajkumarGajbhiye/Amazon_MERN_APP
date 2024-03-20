@@ -24,13 +24,14 @@ const UpdateUserProfile = () => {
     if (user) {
       setName(user.username);
       setEmail(user.email);
-      setAvatarPreview(avatarPreview);
+      setAvatarPreview(user?.avatar?.url);
     }
 
 
     if (isUpdate) {
-      console.log(isUpdate)
+      
       dispatch(get_user_Profile());
+      console.log(isUpdate)
       navigate("/user_profile");
     }
   }, [dispatch,navigate, error, isUpdate]);
@@ -44,6 +45,9 @@ const UpdateUserProfile = () => {
     formData.set("avatar", avatar);
 
     dispatch(update_user_Profile(formData));
+    console.log(name)
+    console.log(email)
+    console.log(avatar)
     navigate("/user_profile");
   };
 
@@ -103,7 +107,7 @@ const UpdateUserProfile = () => {
             <div className="form-group avatar_div">
               <div className="d-flex align-items-center">
                 <div>
-                  <figure className="avatar mr-3 item-rtl">
+                  <figure className="mr-3 item-rtl">
                     <img
                       src={avatarPreview}
                       className="rounded-circle"

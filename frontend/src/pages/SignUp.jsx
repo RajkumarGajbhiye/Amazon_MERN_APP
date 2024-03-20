@@ -114,6 +114,9 @@ const SignUp = () => {
 
   const redirect = location.search ? location.search.split("=")[1] : "/account";
 
+  
+   
+
   return (
     <Container className="py-4 " fluid>
       <Row className="justify-content-md-center mb-4">

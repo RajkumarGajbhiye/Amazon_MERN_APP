@@ -4,7 +4,7 @@ import {
   generateToken,
   authTokenVerification,
 } from "../utils/generateToken.js";
-import  cloudinary  from "cloudinary";
+import cloudinary from "cloudinary";
 
 // Register Api:
 
@@ -15,8 +15,8 @@ const register = asyncHandler(async (req, res) => {
     crop: "scale",
   });
 
-  const {username,mobile,email,password} = req.body;
-   const userExists = await User.findOne({ email });
+  const { username, mobile, email, password } = req.body;
+  const userExists = await User.findOne({ email });
 
   if (userExists) {
     res.status(400);
@@ -33,16 +33,16 @@ const register = asyncHandler(async (req, res) => {
       url: myCloud.secure_url,
     },
   });
-  console.log(user)
+  console.log(user);
   if (user) {
-      res.status(201).json({
-        status: "Successful Sign Up!",
-        user
-      });
-    } else {
-      res.status(400);
-      throw new Error("Invalid user Data");
-    }
+    res.status(201).json({
+      status: "Successful Sign Up!",
+      user,
+    });
+  } else {
+    res.status(400);
+    throw new Error("Invalid user Data");
+  }
 });
 
 //login
@@ -107,59 +107,57 @@ const logoutUser = (req, res) => {
   res.cookie("token", null, {
     expires: new Date(Date.now()),
     httpOnly: true,
-});
+  });
 
-res.status(200).json({
+  res.status(200).json({
     success: true,
     message: "Logged Out",
+  });
+};
+
+//get user profile
+const getUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    res.json({
+      _id: user._id,
+      username: user.username,
+      mobile: user.mobile,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
 });
+
+//update User Profile
+const updateUserProfile = asyncHandler(async (req, res) => {
+  const newUserData = {
+    username: req.body.username,
+    email: req.body.email,
   };
 
-  //get user profile
-  const getUserProfile = asyncHandler(async (req, res) => {
-    const user = await User.findById(req.user._id);
-  
-    if (user) {
-      res.json({
-        _id: user._id,
-        username: user.username,
-        mobile:user.mobile,
-        email: user.email,
-        isAdmin: user.isAdmin,
-      });
-    } else {
-      res.status(404);
-      throw new Error('User not found');
-    }
-  })
-
-  //update User Profile 
-  const updateUserProfile = asyncHandler(async (req, res) => {
-    const newUserData = {
-      username: req.body.username,
-      email: req.body.email,
-    };
-
-    // Update avatar
   if (req.body.avatar !== "") {
     const user = await User.findById(req.user.id);
-
-    const image_id = user.avatar.public_id;
-    const res = await cloudinary.v2.uploader.destroy(image_id);
-
+    if (user.avatar) {
+      const image_id = user.avatar.public_id;
+      await cloudinary.v2.uploader.destroy(image_id);
+    }
     const result = await cloudinary.v2.uploader.upload(req.body.avatar, {
       folder: "avatars",
       width: 150,
       crop: "scale",
     });
-
     newUserData.avatar = {
       public_id: result.public_id,
       url: result.secure_url,
     };
   }
 
-  const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+  const updatedUser = await User.findByIdAndUpdate(req.user.id, newUserData, {
     new: true,
     runValidators: true,
     useFindAndModify: false,
@@ -167,28 +165,36 @@ res.status(200).json({
 
   res.status(200).json({
     success: true,
-    message: "User profile update successfully",
+    message: "User profile updated successfully",
+    data: updatedUser,
   });
+});
+
+//update user
+const updateUser = asyncHandler(async (req, res, next) => {
+  const newUserData = {
+    username: req.body.username,
+    email: req.body.email,
+    role: req.body.role,
+  };
+
+  const user = await User.findByIdAndUpdate(req.params.id, newUserData, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false,
   });
-  
-  //update user
-  const updateUser = asyncHandler(async (req, res, next) => {
-    const newUserData = {
-      username: req.body.username,
-      email: req.body.email,
-      role: req.body.role,
-    };
-  
-    const user = await User.findByIdAndUpdate(req.params.id, newUserData, {
-      new: true,
-      runValidators: true,
-      useFindAndModify: false,
-    });
-  
-    res.status(200).json({
-      success: true,
-    });
+
+  res.status(200).json({
+    success: true,
   });
-  
-  
-export { register, login, protect,logoutUser,getUserProfile,updateUserProfile,updateUser};
+});
+
+export {
+  register,
+  login,
+  protect,
+  logoutUser,
+  getUserProfile,
+  updateUserProfile,
+  updateUser,
+};

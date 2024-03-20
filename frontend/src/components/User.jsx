@@ -21,7 +21,6 @@ const User = () => {
   const { user, isLoading } = useSelector((state) => state.signUp);
   
 
-  console.log(user)
   if (user) {
     loginUser = true;
   }

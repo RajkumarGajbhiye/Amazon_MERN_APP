@@ -8,8 +8,8 @@ const user = JSON.parse(localStorage.getItem('user'))
     isLoading: false, // Flag for loading state
     error: null, // Store any errors
     success: false, // Indicate successful registration
-   user :user ? user : null,
-
+   user :{},
+   isAuthenticated: false,
   }
 
   export const userSignInSlice = createSlice({
@@ -22,16 +22,19 @@ const user = JSON.parse(localStorage.getItem('user'))
       .addCase(userSignIn.pending, state => {
         state.isLoading = true;
           state.error = null;
+          state.isAuthenticated = false
       })
        .addCase(userSignIn.fulfilled, (state, action) => {
         state.user = action.payload,
         state.isLoading = false;
-        state.success = true;      
+        state.success = true;  
+        state.isAuthenticated = true  
       })
       .addCase(userSignIn.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message; 
-        state.user = null     
+        state.user = null ,
+        state.isAuthenticated = false   
       })
     },
   })

@@ -62,7 +62,7 @@ function Header() {
         >
           <Offcanvas.Header closeButton>
             <Offcanvas.Title id="offcanvasNavbarLabel-expand-lg">
-              Hellow sign In
+              Hellow, {user.username}
             </Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
@@ -223,7 +223,7 @@ function Header() {
                 }
               >
                 <Nav.Link>
-                  Hellow,{user.username} Account & List
+                  Hellow,{user?.username} Account & List
                   <Image
                     onClick={handleClick}
                     
