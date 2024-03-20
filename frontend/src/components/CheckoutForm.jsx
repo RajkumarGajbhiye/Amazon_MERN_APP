@@ -34,10 +34,10 @@ const CheckoutForm = () => {
   const placeOrderHandler = async (amount) => {
     const {
       data: { key },
-    } = await axios.get("http://localhost:2000/api/getkey");
+    } = await axios.get("https://amazon-mern-app.onrender.com/api/getkey");
     const {
       data: { order },
-    } = await axios.post("http://localhost:2000/checkout", { amount });
+    } = await axios.post("https://amazon-mern-app.onrender.com/checkout", { amount });
     console.log(window);
     const options = {
       key,
@@ -47,7 +47,7 @@ const CheckoutForm = () => {
       description: "Razorpay tutorial",
       image: "https://avatars.githubusercontent.com/u/109793318?v=4",
       order_id: order.id,
-      callback_url: "http://localhost:2000/paymentverification",
+      callback_url: "https://amazon-mern-app.onrender.com/paymentverification",
       prefill: {
         name: "Rajkumar Gajbhiye",
         email: "admin@gmail.com",
